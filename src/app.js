@@ -16,10 +16,45 @@ app.post("/products", async(req, res)=>{
         })
     }catch(err){
         res.status(500).json({
-        messagec: "error in creatig product",
+        message: "error in creatig product",
         error: err.message
         })
     }
 })
 
+
+app.get("/products", async(req, res)=>{
+    try{
+        const product = await productModel.find()
+        res.status(200).json({
+            message: "product fetched successfully"
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            message : "error fetching product",
+            error : err.message
+        })
+    }
+})
+
+
+app.get("/products/:id", async(req, res)=>{
+    try{
+        const product = await productModel.findById(req.params.id);
+        if(!product){
+            return res.status(404).json({
+                message : "product not found"
+            })
+
+        }
+        res.status(200).json(product)
+    }
+    catch (err){
+        res.status(500).json({
+            message : "error",
+            error: err.message
+        })
+    }
+})
 module.exports = app;
